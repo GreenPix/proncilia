@@ -16,6 +16,9 @@ const LOG_INFO = 0;
 const LOG_ERR = 1;
 const LOG_VERBOSE = 2;
 
+var sqlite = require('sqlite3').verbose();
+var logdb = new sqlite.Database("log.db");
+
 function LogEntry(subject, p, message) {
     this.subject = subject;
     this.priority = p;
@@ -48,7 +51,24 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
 app.get('/logs/bz', function(req, res) {
-    res.json(bz_log);
+    logdb.all("SELECT time, p, subject, message FROM bz",
+              function (err,rows) {
+                  if (err) {
+                      console.log(err);
+                  } else {
+                      var r = [];
+                      for (row of rows) {
+                          var tmp = {};
+                          tmp.time = row.time;
+                          tmp.log = new LogEntry(row.subject,
+                                                 row.priority,
+                                                 "" + row.message);
+                          r[r.length] = tmp;
+                      }
+
+                      res.json(r);
+                  }
+              });
 });
 
 app.post('/start-server', function(req, res) {
@@ -75,6 +95,12 @@ app.post('/start-server', function(req, res) {
 
         bz.stdout.on('data', (data) => {
             var log = JSON.parse(`${data}`);
+            logdb.run("INSERT INTO bz (time, p, subject, message) VALUES (?, ?, ?, ?)",
+                      Date.now(), log.priority, log.subject, log.msg, function (err) {
+                          if (err) {
+                              console.log("error with db");
+                          }
+                      });
             bz_log.push(log);
             log_print("bz", log);
         });
