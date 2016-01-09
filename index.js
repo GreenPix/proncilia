@@ -47,6 +47,10 @@ function log_print(mod, log) {
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
+app.get('/logs/bz', function(req, res) {
+    res.json(bz_log);
+});
+
 app.post('/start-server', function(req, res) {
     if (!session) {
         var env = {};
