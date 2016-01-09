@@ -20,15 +20,22 @@ app.post('/start-server', function(req, res) {
         session = {};
         session.live = true;
 
+        var env = {};
+
+        env["RENAISSANCE_AUTHENT_PORT"] = config.authent.port;
+        env["RENAISSANCE_AUTHENT_BACKEND"] = config.authent.backend.name;
+
+        switch (config.authent.backend.name) {
+        case "yesman":
+            env["RENAISSANCE_AUTHENT_YESMAN_USERDB"] = config.authent.backend.config.userdb;
+            break;
+        }
+
         authent = spawn("node", [ "index.js" ], {
             cwd: config.authent.root,
-            env: {
-                RENAISSANCE_USER_DB: config.user_db,
-                RENAISSANCE_AUTHENT_PORT: config.authent.port
-            }
-        }); // config.authent_root
+            env: env
+        });
 
-        
         authent.stderr.on('data', (data) => {
             console.log(`${data}`);
         });
