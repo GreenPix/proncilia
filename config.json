@@ -1,0 +1,8 @@
+{
+    "authent": {
+        "root": "../authent-yesman/",
+        "port": 8080
+    },
+
+    "user_db": "../authent-yesman/user.db"
+}

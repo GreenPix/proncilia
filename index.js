@@ -8,6 +8,8 @@ var TOKEN = 0;
 var session = null
 var authent;
 
+var config = require('./config.json');
+
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
@@ -18,7 +20,22 @@ app.post('/start-server', function(req, res) {
         session = {};
         session.live = true;
 
-        authent = spawn("node", [ "index.js" ], { cwd: "../authent-yesman" })
+        authent = spawn("/usr/bin/node", [ "index.js" ], {
+            cwd: config.authent.root,
+            env: {
+                RENAISSANCE_USER_DB: config.user_db,
+                RENAISSANCE_AUTHENT_PORT: config.authent.port
+            }
+        }); // config.authent_root
+
+        
+        authent.stderr.on('data', (data) => {
+            console.log(`${data}`);
+        });
+
+        authent.on('exit', (code) => {
+            console.log(`Child exited with code ${code}`);
+        });
 
         res.json(r);
     } else {
