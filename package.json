@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "proncilia",
   "version": "0.0.1",
   "description": "admin console for renaissance project",
   "main": "index.js",
@@ -16,6 +16,5 @@
     "admin",
     "renaissance"
   ],
-  "author": "Ikyushii <hi@ikyushii.eu>",
-  "license": "MIT"
+  "author": "Ikyushii <hi@ikyushii.eu>"
 }

@@ -1,17 +1,18 @@
-# Admin Console
+# proncilia
 
-This project is part of the Renaissance project, that is an attempt
-to write an open source 2D online RPG engine. The Admin Console is
-intended to drive the server components
+This project is part of the Renaissance project, that is an attempt to
+write an open source 2D online RPG engine. proncilia is intended to be
+an admin console to drive the server components
 
 ## Security Disclaimer
 
-As for now, admin does not care about security. It does not use any
-authentication, so you'd rather **NOT USE it FOR REAL LIFE PURPOSE**.
+As for now, proncilia does not care about security. It does not use
+any authentication, so you'd rather **NOT USE IT FOR REAL LIFE
+PURPOSE**.
 
 ## Available commands
 
-Admin Console exposes a REST API.
+proncilia exposes a REST API.
 
 ### `POST /start-server`
 
