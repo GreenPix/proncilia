@@ -10,6 +10,40 @@ var bz;
 
 var config = require('./config.json');
 
+var bz_log = [];
+
+const LOG_INFO = 0;
+const LOG_ERR = 1;
+const LOG_VERBOSE = 2;
+
+function LogEntry(subject, p, message) {
+    this.subject = subject;
+    this.priority = p;
+    this.msg = message;
+}
+
+function log_info (subject, p, message) {
+    console.log(JSON.stringify(new LogEntry(subject, LOG_INFO, message)));
+}
+
+function log_print(mod, log) {
+    var p;
+
+    switch (log.priority) {
+    case LOG_INFO:
+        p = "INF";
+        break;
+    case LOG_ERR:
+        p = "ERR";
+        break;
+    case LOG_VERBOSE:
+        p = "VER";
+        break;
+    }
+
+    console.log(p + " [" + mod + "] <" + log.subject + "> " + log.msg);
+}
+
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
@@ -38,6 +72,12 @@ app.post('/start-server', function(req, res) {
 
         bz.stderr.on('data', (data) => {
             console.log(`${data}`);
+        });
+
+        bz.stdout.on('data', (data) => {
+            var log = JSON.parse(`${data}`);
+            bz_log.push(log);
+            log_print("bz", log);
         });
 
         bz.on('exit', (code) => {
