@@ -20,7 +20,7 @@ app.post('/start-server', function(req, res) {
         session = {};
         session.live = true;
 
-        authent = spawn("/usr/bin/node", [ "index.js" ], {
+        authent = spawn("node", [ "index.js" ], {
             cwd: config.authent.root,
             env: {
                 RENAISSANCE_USER_DB: config.user_db,
