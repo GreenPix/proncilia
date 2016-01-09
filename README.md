@@ -47,8 +47,8 @@ Get the logs produced by bz, the authentication server.
     {
         "time": "$(time: Timestamp)",
         "log": {
-            "subject": "$(subject: String)"
-            "priority": "$(priority: Int)"
+            "subject": "$(subject: String)",
+            "priority": "$(priority: Int)",
             "msg": "$(msg: String)"
         }
     },
