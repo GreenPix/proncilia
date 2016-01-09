@@ -6,7 +6,7 @@ var app = express();
 var TOKEN = 0;
 
 var session = null
-var authent;
+var bz;
 
 var config = require('./config.json');
 
@@ -22,25 +22,25 @@ app.post('/start-server', function(req, res) {
 
         var env = {};
 
-        env["RENAISSANCE_AUTHENT_PORT"] = config.authent.port;
-        env["RENAISSANCE_AUTHENT_BACKEND"] = config.authent.backend.name;
+        env["RENAISSANCE_BZ_PORT"] = config.bz.port;
+        env["RENAISSANCE_BZ_BACKEND"] = config.bz.backend.name;
 
-        switch (config.authent.backend.name) {
+        switch (config.bz.backend.name) {
         case "yesman":
-            env["RENAISSANCE_AUTHENT_YESMAN_USERDB"] = config.authent.backend.config.userdb;
+            env["RENAISSANCE_BZ_YESMAN_USERDB"] = config.bz.backend.config.userdb;
             break;
         }
 
-        authent = spawn("node", [ "index.js" ], {
-            cwd: config.authent.root,
+        bz = spawn("node", [ "index.js" ], {
+            cwd: config.bz.root,
             env: env
         });
 
-        authent.stderr.on('data', (data) => {
+        bz.stderr.on('data', (data) => {
             console.log(`${data}`);
         });
 
-        authent.on('exit', (code) => {
+        bz.on('exit', (code) => {
             console.log(`Child exited with code ${code}`);
         });
 
@@ -55,7 +55,7 @@ app.post('/stop-server', function(req, res) {
         res.status(403);
     } else {
         session = null
-        authent.kill('SIGKILL');
+        bz.kill('SIGKILL');
     }
 
     res.end();

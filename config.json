@@ -1,11 +1,11 @@
 {
-    "authent": {
-        "root": "../authent-yesman/",
+    "bz": {
+        "root": "../bz/",
         "port": 8080,
         "backend": {
             "name": "yesman",
             "config": {
-                "userdb": "../authent-yesman/user.db"
+                "userdb": "../bz/user.db"
             }
         }
     }
