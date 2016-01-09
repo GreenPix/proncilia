@@ -5,7 +5,7 @@ var spawn = require('child_process').spawn;
 var app = express();
 var TOKEN = 0;
 
-var session = null
+var session = false;
 var bz;
 
 var config = require('./config.json');
@@ -48,12 +48,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 
 app.post('/start-server', function(req, res) {
-    if (session == null) {
-        var r = {}
-        r.token = TOKEN;
-        session = {};
-        session.live = true;
-
+    if (!session) {
         var env = {};
 
         env["RENAISSANCE_BZ_PORT"] = config.bz.port;
@@ -84,21 +79,22 @@ app.post('/start-server', function(req, res) {
             console.log(`Child exited with code ${code}`);
         });
 
-        res.json(r);
+        session = true;
+
+        res.status(204).end();
     } else {
         res.status(403).end();
     }
 });
 
 app.post('/stop-server', function(req, res) {
-    if (session == null) {
-        res.status(403);
-    } else {
-        session = null
+    if (session) {
         bz.kill('SIGKILL');
+        session = false;
+        res.status(204).end();
+    } else {
+        res.status(403).end();
     }
-
-    res.end();
 });
 
 
