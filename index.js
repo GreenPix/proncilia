@@ -7,6 +7,7 @@ var TOKEN = 0;
 
 var session = false;
 var bz;
+var bz_live = false;
 
 var config = require('./config.json');
 
@@ -49,6 +50,17 @@ function log_print(mod, log) {
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
+
+app.get('/status', function(req, res) {
+    var r = {
+        live: session,
+        services: {
+            bz: bz_live
+        }
+    }
+
+    res.json(r);
+});
 
 app.get('/logs/bz', function(req, res) {
     logdb.all("SELECT time, p, subject, message FROM bz",
@@ -109,6 +121,7 @@ app.post('/start-server', function(req, res) {
             console.log(`Child exited with code ${code}`);
         });
 
+        bz_live = true;
         session = true;
 
         res.status(204).end();
@@ -121,6 +134,7 @@ app.post('/stop-server', function(req, res) {
     if (session) {
         bz.kill('SIGKILL');
         session = false;
+        bz_live = false;
         res.status(204).end();
     } else {
         res.status(403).end();
