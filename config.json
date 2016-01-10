@@ -1,7 +1,8 @@
 {
     "bz": {
         "root": "../bz/",
-        "port": 8080,
+        "pub_port": 8080,
+        "priv_port": 8081,
         "backend": {
             "name": "yesman",
             "config": {

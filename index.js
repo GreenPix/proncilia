@@ -85,20 +85,21 @@ app.get('/logs/bz', function(req, res) {
 
 app.post('/start-server', function(req, res) {
     if (!session) {
-        var env = {};
+        var env_bz = {};
 
-        env["RENAISSANCE_BZ_PORT"] = config.bz.port;
-        env["RENAISSANCE_BZ_BACKEND"] = config.bz.backend.name;
+        env_bz["RENAISSANCE_BZ_PUB_PORT"] = config.bz.pub_port;
+        env_bz["RENAISSANCE_BZ_PRIV_PORT"] = config.bz.priv_port;
+        env_bz["RENAISSANCE_BZ_BACKEND"] = config.bz.backend.name;
 
         switch (config.bz.backend.name) {
         case "yesman":
-            env["RENAISSANCE_BZ_YESMAN_USERDB"] = config.bz.backend.config.userdb;
+            env_bz["RENAISSANCE_BZ_YESMAN_USERDB"] = config.bz.backend.config.userdb;
             break;
         }
 
         bz = spawn("node", [ "index.js" ], {
             cwd: config.bz.root,
-            env: env
+            env: env_bz
         });
 
         bz.stderr.on('data', (data) => {
