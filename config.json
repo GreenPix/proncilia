@@ -9,5 +9,9 @@
                 "userdb": "../bz/user.db"
             }
         }
+    },
+    "gjanajo": {
+        "root": "../gjanajo/",
+        "port": 8082
     }
 }

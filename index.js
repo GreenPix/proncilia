@@ -2,14 +2,20 @@ var express = require('express');
 var bodyparser = require('body-parser');
 var spawn = require('child_process').spawn;
 
+var conf = require('./config.js');
+var config = require('./config.json');
+
 var app = express();
 var TOKEN = 0;
 
 var session = false;
+
 var bz;
 var bz_live = false;
 
-var config = require('./config.json');
+var gjanajo;
+var gjanajo_live = false;
+
 
 var bz_log = [];
 
@@ -85,21 +91,15 @@ app.get('/logs/bz', function(req, res) {
 
 app.post('/start-server', function(req, res) {
     if (!session) {
-        var env_bz = {};
-
-        env_bz["RENAISSANCE_BZ_PUB_PORT"] = config.bz.pub_port;
-        env_bz["RENAISSANCE_BZ_PRIV_PORT"] = config.bz.priv_port;
-        env_bz["RENAISSANCE_BZ_BACKEND"] = config.bz.backend.name;
-
-        switch (config.bz.backend.name) {
-        case "yesman":
-            env_bz["RENAISSANCE_BZ_YESMAN_USERDB"] = config.bz.backend.config.userdb;
-            break;
-        }
+        gjanajo = spawn("node", [ "index.js" ], {
+            cwd: config.gjanajo.root,
+            env: conf.gjanajo_env_var(config)
+        });
+        gjanajo_live = true;
 
         bz = spawn("node", [ "index.js" ], {
             cwd: config.bz.root,
-            env: env_bz
+            env: conf.bz_env_var(config)
         });
 
         bz.stderr.on('data', (data) => {
