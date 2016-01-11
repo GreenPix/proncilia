@@ -134,8 +134,10 @@ app.post('/start-server', function(req, res) {
 app.post('/stop-server', function(req, res) {
     if (session) {
         bz.kill('SIGKILL');
+        gjanajo.kill('SIGKILL');
         session = false;
         bz_live = false;
+        gjanajo_live = false;
         res.status(204).end();
     } else {
         res.status(403).end();
