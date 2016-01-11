@@ -6,12 +6,18 @@
         "backend": {
             "name": "yesman",
             "config": {
-                "userdb": "../bz/user.db"
+                "userdb": "user.db"
             }
         }
     },
     "gjanajo": {
         "root": "../gjanajo/",
-        "port": 8082
+        "port": 8082,
+        "backend": {
+            "name": "sqlite",
+            "config": {
+                "db": "game.db"
+            }
+        }
     }
 }

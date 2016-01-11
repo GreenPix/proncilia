@@ -20,5 +20,11 @@ exports.gjanajo_env_var = function (config) {
         RENAISSANCE_GJANAJO_PORT: config.gjanajo.port
     };
 
+    switch (config.gjanajo.backend.name) {
+    case "sqlite":
+        res["RENAISSANCE_GJANAJO_SQLITE_DB"] = config.gjanajo.backend.config.db;
+        break;
+    }
+
     return res;
 }
