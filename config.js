@@ -17,7 +17,8 @@ exports.bz_env_var = function (config) {
 
 exports.gjanajo_env_var = function (config) {
     var res = {
-        RENAISSANCE_GJANAJO_PORT: config.gjanajo.port
+        RENAISSANCE_GJANAJO_PORT: config.gjanajo.port,
+        RENAISSANCE_GJANAJO_BACKEND: config.gjanajo.backend.name
     };
 
     switch (config.gjanajo.backend.name) {
